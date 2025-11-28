@@ -1,0 +1,28 @@
+GitHub Action to review PR via OpenRouter.ai
+In flow file you have choose the model and prompt template.
+
+
+
+name: AI PR Review Test
+
+permissions:
+  contents: read
+  pull-requests: write
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: maxlim0/AI-PR-Reviewer@<TAG>
+        env: 
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          openrouter_api_key: ${{ secrets.OPENROUTER_API_KEY }}
+          model: "x-ai/grok-4.1-fast:free"
+          prompt_template: |
+            Analyze the next diff check the problems if any describe them shortly. Not more than 200 words:
+            {{DIFF}}
